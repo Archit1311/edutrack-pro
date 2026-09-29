@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # ── MySQL 8.0 Relational Database ───────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: edutrack-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_secret_password
+      MYSQL_DATABASE: attendance_db
+      MYSQL_USER: edutrack
+      MYSQL_PASSWORD: edutrack_secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend/src/main/resources/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uedutrack", "-pedutrack_secret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── MongoDB 6.0 (Audit Logs & Event Store) ─────────────────
+  mongodb:
+    image: mongo:6.0
+    container_name: edutrack-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: edutrack_audit
+    volumes:
+      - mongo_data:/data/db
+
+  # ── Apache Kafka (KRaft mode) ──────────────────────────────
+  kafka:
+    image: bashj79/kafka-kraft:latest
+    container_name: edutrack-kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+    environment:
+      KRAFT_CONTAINER_HOST_NAME: kafka
+    volumes:
+      - kafka_data:/tmp/kraft-combined-logs
+
+volumes:
+  mysql_data:
+  mongo_data:
+  kafka_data:

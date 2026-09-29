@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: edutrack-attendance-service
+
+  datasource:
+    # Default to embedded H2 (MySQL Mode) for out-of-the-box readiness
+    url: jdbc:h2:mem:attendance_db;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      # data-locations loaded programmatically or via sql
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+# Security & JWT Configuration
+security:
+  jwt:
+    secret: edutrack_secret_jwt_key_must_be_at_least_256_bits_long_for_hmac_sha256_security_token_verification
+    access-token-expiration: 86400000 # 24 hours (in ms)
+    refresh-token-expiration: 604800000 # 7 days (in ms)
+
+cors:
+  allowed-origins:
+    - "http://localhost:5173"
+    - "http://localhost:5174"
+    - "http://127.0.0.1:5173"
+    - "http://127.0.0.1:5174"
+
+logging:
+  level:
+    root: INFO
+    com.edutrack.attendance: DEBUG
+    org.springframework.jdbc: INFO
