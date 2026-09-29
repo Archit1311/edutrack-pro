@@ -108,6 +108,67 @@ export default function LoginPage() {
       >
         <RoleTabSwitcher activeRole={role} onSelectRole={handleRoleChange} />
 
+        {/* Quick Test Credentials Box */}
+        <div style={{
+          backgroundColor: 'var(--color-surface-container)',
+          borderRadius: 'var(--radius-md)',
+          padding: '10px 12px',
+          marginBottom: 'var(--space-md)',
+          border: '1px solid var(--color-outline-variant)',
+          fontSize: '12px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span style={{ fontWeight: 600, color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>key</span>
+              Institutional Test Accounts:
+            </span>
+            <span style={{ color: 'var(--color-on-surface-variant)', fontSize: '11px' }}>
+              Pass: <code style={{ backgroundColor: 'var(--color-surface-container-high)', padding: '2px 4px', borderRadius: '4px', color: 'var(--color-primary)' }}>password123</code>
+            </span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+            <button
+              type="button"
+              className={`btn btn-sm ${role === 'student' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '11px', padding: '6px 4px', borderRadius: '6px', textAlign: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                setRole('student');
+                setIdentifier('20240192');
+                setPassword('password123');
+                setError('');
+              }}
+            >
+              Student
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm ${role === 'faculty' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '11px', padding: '6px 4px', borderRadius: '6px', textAlign: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                setRole('faculty');
+                setIdentifier('FAC-8921');
+                setPassword('password123');
+                setError('');
+              }}
+            >
+              Faculty
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm ${role === 'admin' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '11px', padding: '6px 4px', borderRadius: '6px', textAlign: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                setRole('admin');
+                setIdentifier('ADM-0001');
+                setPassword('password123');
+                setError('');
+              }}
+            >
+              Admin
+            </button>
+          </div>
+        </div>
+
         {error && (
           <div className="error-alert" style={{ marginBottom: 'var(--space-md)' }}>
             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>error</span>
